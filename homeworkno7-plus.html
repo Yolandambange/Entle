@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App shecodes</title>
+    <style>
+      h2 {
+        text-align: left;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+      }
+
+      .weather-app {
+        background: white;
+        max-width: 600px;
+        margin: 30px auto;
+        box-shadow: 0 30px 50px rgba(65, 50, 100, 0.08);
+        border-radius: 16px;
+        padding: 30px;
+      }
+      
+      .weather-display strong {
+        color: red;
+      }
+
+      header {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      input[type="text"] {
+        padding: 10px;
+        width: 70%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        padding: 10px 15px;
+        background: #6c63ff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .weather-info {
+        margin-top: 20px;
+        text-align: center;
+        display: flex;
+        gap: 300px;
+        font-size: 30px;
+      }
+
+      .temp-container {
+       display: flex;
+       align-items: center;
+      justify-content: center;
+      }
+
+      .weather-info img {
+        width: 80px;
+        height: 80px;
+      }
+
+      footer {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 40px;
+        color: #777;
+      }
+
+      a {
+        color: #6c63ff;
+        text-decoration: none;
+      }
+     
+    </style>
+  </head>
+  <body>
+    <div class="weather-app">
+      <h1>
+        <img
+          src="data:image/png;base64,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"
+          alt=""
+        />
+      </h1>
+      <header>
+        <input type="text" id="city-input" placeholder="Enter city name" />
+        <button onclick="searchCity()">Search</button>
+      </header>
+      </br>
+      <div class="weather-info" id="weather">
+        <h2>Paris</h2>
+      </br>
+        ☀️ 21°C
+      </div> 
+      <main>
+
+      <p id="weather-description">Tuesday 19:13, clear sky</p>
+      Humidity: <strong>87%</strong>, 
+      Wind:<strong> 4.63km/h</strong>
+    </main>
+  </br>
+    <footer>
+      This project was coded by
+       <a href="https://www.shecodes.io/" target="_blank"
+            >Nomfundiso Yolanda Mbange</a
+          >, and is on
+          <a href="https://github.com/" target="_blank">GitHub</a> and
+          <a href="https://vercel.com/" target="_blank">hosted on Vercel</a>.
+        </p>
+  </a>.
+    </footer>
+    <script>
+      function searchCity() {
+    
+    let city = document.getElementById("city-input").value.trim();
+    if (!city) return;
+
+    const apiKey = "66b8952cb898cc3653b3145c896636ab";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+
+         fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.cod === 200) {
+          // Format date
+          const date = new Date(data.dt * 1000);
+          const options = { weekday: "long", hour: "2-digit", minute: "2-digit" };
+          const formattedDate = date.toLocaleString("en-US", options);
+
+          // Update weather block
+          const weatherElement = document.getElementById("weather");
+          weatherElement.innerHTML = `
+            <h2>${data.name}</h2>
+          <div class="temp-container">
+         <img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="Weather icon" />
+         <span>${Math.round(data.main.temp)}°C</span>
+         </div>
+          `;
+
+          // Update main weather description
+          const weatherDescription = document.getElementById("weather-description");
+          weatherDescription.innerHTML = `${formattedDate}, ${data.weather[0].description}`;
+
+          // Update humidity and wind
+          const main = document.querySelector("main");
+          main.innerHTML = `
+            <p id="weather-description">${formattedDate}, ${data.weather[0].description}</p>
+            Humidity: <strong>${data.main.humidity}%</strong>,
+            Wind: <strong>${data.wind.speed} km/h</strong>
+          `;
+        } else {
+          document.getElementById("weather").innerHTML =
+            "<p>City not found. Please try again.</p>";
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
+        document.getElementById("weather").innerHTML =
+          "<p>Unable to retrieve data.</p>";
+      });
+  }
+    </script>
+  </body>
+</html>
+
