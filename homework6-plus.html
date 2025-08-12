@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather 6</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f6f8ff;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start
+        min-height: 100vh;
+        padding: 60px 40px;
+        margin: 0;
+      }
+
+      .container {
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      .weather-app {
+        background: white;
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 30px 50px rgba(65, 50, 100, 0.08);
+      }
+
+      header {
+        border-bottom: 1px solid #f9f7fe;
+        padding-bottom: 30px;
+      }
+
+      .search-input {
+        background-color: #f9f7fe;
+        border: none;
+        color: rgba(39, 33, 66, 0.4);
+        font-size: 16px;
+        padding: 40px;
+        width: 75%;
+        border-radius: 6px;
+      }
+
+      .search-button {
+        margin-left: 5px;
+        font-size: 16px;
+        background-color: #885df1;
+        color: white;
+        border: none;
+        padding: 40px;
+        line-height: 1;
+        border-radius: 5px;
+      }
+
+      main {
+        padding: 30px 0;
+      }
+
+      .current-temperature {
+        font-size: 48px;
+      }
+
+      .current-weather {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .current-city {
+        font-size: 38px;
+        font-weight: 900;
+        margin: 0;
+      }
+      .current-details {
+        color: rgba(39, 33, 66, 0.4);
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+
+      .weather-display strong {
+        color: red;
+      }
+
+      .temperature-box {
+        position: absolute;
+        right: 700px;
+        top: 130px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      footer {
+        border-top: 1px solid #f9f7fe;
+        text-align: center;
+        padding-top: 15px;
+
+        color: rgba(24, 1, 124, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form class="search-form" id="search-form">
+        <input type="text" id="city-input" placeholder="Enter a city..." />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="weather-display">
+        <h1 id="city-name">Paris</h1>
+        <p id="weather-description">Saturday 19:45, moderate rain</p>
+        <p id="details">
+          Humidity: <strong id="humidity">87%</strong>, Wind:
+          <strong id="wind">7.2 km/h</strong>
+        </p>
+        <div class="temperature-box">
+          <span id="emoji">☀️</span>
+          <span id="temperature">24°C</span>
+        </div>
+      </div>
+      <footer class="footer">
+        <p>
+          This project was coded by
+          <a href="https://www.shecodes.io/" target="_blank"
+            >Nomfundiso Yolanda Mbange</a
+          >, and is on
+          <a href="https://github.com/" target="_blank">GitHub</a> and
+          <a href="https://vercel.com/" target="_blank">hosted on Vercel</a>.
+        </p>
+      </footer>
+    </div>
+  </body>
+  <script>
+    const apiKey = "6cd42292d9e879aefe312fcd94a469a9";
+
+    document
+      .getElementById("search-form")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        searchCity();
+      });
+
+    function searchCity() {
+      const city = document.getElementById("city-input").value.trim();
+      if (!city) {
+        alert("Please enter a city name!");
+        return;
+      }
+
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      fetch(apiUrl)
+        .then((response) => {
+          if (!response.ok) throw new Error("City not found");
+          return response.json();
+        })
+        .then((data) => {
+          // Update the existing elements
+          document.getElementById("city-name").textContent = data.name;
+
+          const date = new Date();
+          const hours = date.getHours().toString().padStart(2, "0");
+          const minutes = date.getMinutes().toString().padStart(2, "0");
+          const weatherDesc = data.weather[0].description;
+
+          document.getElementById(
+            "humidity"
+          ).textContent = `${data.main.humidity}%`;
+          document.getElementById(
+            "wind"
+          ).textContent = `${data.wind.speed} km/h`;
+          document.getElementById("temperature").textContent = `${Math.round(
+            data.main.temp
+          )}°C`;
+
+          // Update weather emoji
+          const weatherMain = data.weather[0].main.toLowerCase();
+          let emoji = "❓";
+          if (weatherMain.includes("cloud")) emoji = "☁️";
+          else if (weatherMain.includes("rain")) emoji = "🌧️";
+          else if (weatherMain.includes("clear")) emoji = "☀️";
+          else if (weatherMain.includes("snow")) emoji = "❄️";
+          else if (weatherMain.includes("thunderstorm")) emoji = "🌩️";
+          else if (weatherMain.includes("mist") || weatherMain.includes("fog"))
+            emoji = "🌫️";
+
+          document.getElementById("emoji").textContent = emoji;
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    }
+  </script>
+</html>
